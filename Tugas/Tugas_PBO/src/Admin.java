@@ -1,15 +1,23 @@
-public class Admin {//ini atribut nya buat nyimpan Username sama password nya
-    String Username;
-    String Password;
+public class Admin extends User {
 
-    public Admin(String Usename, String Password) {//ini constructor nya buat inisialisasi Username sama Password nya
-        this.Username = Usename;
-        this.Password = Password;
-        }
-        //boolean mengembalikan nilai true dan false, jadi ini tuh sebagai method apakah input login sesuai atau tidak
+    private String username;
+    private String password;
 
-        public boolean login(String inputUsername, String inputPassword) {
-            System.out.println(inputUsername.equals(Username) && inputPassword.equals(Password));
-        return inputUsername.equals(Username) && inputPassword.equals(Password);
+    public Admin(String username, String password) {
+        super(username, password);
+        this.username = username;
+        this.password = password;
+    }
+
+    @Override
+    public boolean login(String input1, String input2) {
+        return this.username.equals(input1) && this.password.equals(input2);
+    }
+
+    @Override
+    public void displayinfo() {
+        System.out.println("Login Admin berhasil!");
+        System.out.println("Username: " + username);
+        System.out.println("Password: " + password);
     }
 }

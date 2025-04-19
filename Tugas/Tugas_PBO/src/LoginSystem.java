@@ -2,59 +2,45 @@ import java.util.Scanner;
 
 public class LoginSystem {
     public static void main(String[] args) {
-        Scanner PBO = new Scanner(System.in);
-        //Loop utama program (akan terus berjalan sampai user pilih '3. Keluar')
-        do {
-            System.out.println("Masukkan Pilihan Anda ");//ini adalah menu login nya
-            System.out.println("1. Admin");
-            System.out.println("2. Mahasiswa");
-            System.out.println("3. Keluar");
-            System.out.println("Pilih : ");
+        Scanner scanner = new Scanner(System.in);
 
-            int choice = PBO.nextInt();//Input pilihan dari user
-            PBO.nextLine();
+        Admin admin = new Admin("Admin056", "Password056");
+        Mahasiswa mahasiswa = new Mahasiswa("Mahligai Arsya Nanda", "202410370110056");
 
-            if (choice == 1) {
-                System.out.println("Masukkan Username");// Login sebagai Admin
-                String Username = PBO.nextLine();
-                System.out.println("Masukkan Password");
-                String Password = PBO.nextLine();
+        System.out.println("Pilihan login:");
+        System.out.println("1. Login Admin");
+        System.out.println("2. Login Mahasiswa");
+        System.out.print("Masukkan pilihan: ");
 
-                //membuat objek admin dengan username dan password valid
-                Admin admin = new Admin("Admin056", "Password056");
+        int pilihan = scanner.nextInt();
+        scanner.nextLine();
 
-                //cek login admin
-                if (admin.login(Username, Password)) {
-                    System.out.println("Login Admin Berhasil");
-                } else {
-                    System.out.println("Login Admin Gagal");
-                }
-                //login sebagai mahasiswa
-            } else if (choice == 2) {
-                System.out.println("Masukkan Nama");
-                String Nama = PBO.nextLine();
+        if (pilihan == 1) {
+            System.out.print("Masukkan username: ");
+            String username = scanner.nextLine();
+            System.out.print("Masukkan password: ");
+            String password = scanner.nextLine();
 
-                System.out.println("Masukkan NIM");
-                String NIM = PBO.nextLine();
-
-                // Membuat objek Mahasiswa dengan nama & NIM valid
-                Mahasiswa mhs = new Mahasiswa("Mahligai Arsya Nanda", "202410370110056");
-
-                //cek login mahasiswa
-                if (mhs.login(Nama, NIM)) {
-                    System.out.println("Login Mahasiswa Berhasil");
-                    mhs.displayInfo();
-                } else {
-                    System.out.println("Login Mahasiswa Gagal");
-                }
-                //keluar dari program
-            } else if (choice == 3) {
-                 System.out.println("Terima kasih, Program berhenti");
-                 break;
+            if(admin.login(username,password)) {
+                admin.displayinfo();
             } else {
-            System.out.println("Pilihan tidak Valid!");
+                System.out.println("Login gagal! username atau password salah");
+            }
+        } else if (pilihan == 2) {
+            System.out.print("Masukkan nama: ");
+            String nama = scanner.nextLine();
+            System.out.print("Masukkan nim: ");
+            String nim = scanner.nextLine();
+
+            if (mahasiswa.login(nama,nim)) {
+                mahasiswa.displayinfo();
+            } else {
+                System.out.println("Login gagal! nama atau nim salah");
+            }
+        } else {
+            System.out.println("Pilihan tidak valid");
         }
-    }while (true);//bakal keulang terus klo belum milih keluar
-        PBO.close();//tutup scanner
+
+        scanner.close();
     }
 }
