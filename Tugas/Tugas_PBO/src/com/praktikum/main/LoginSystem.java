@@ -1,53 +1,78 @@
 package com.praktikum.main;
-
+import com.praktikum.data.Item;
 import com.praktikum.users.*;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class LoginSystem {
+    public static ArrayList<Item> reportedItems = new ArrayList<>();
+    public static ArrayList<User> userList = new ArrayList<>();
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        User user = null;
-        boolean continueLogin = true;
-
-        while (continueLogin) {
-            System.out.println("Login sebagai?");
+        userList.add(new Admin("Arsya Nanda", "056", "Admin056", "Password056"));
+        userList.add(new Mahasiswa("Arsya Nanda", "202410370110056"));
+        while (true) {
+//            User user1 = new Admin("Naufal Arkaan", "020", "Admin020", "Password020");
+//            User user2 = new Mahasiswa("Naufal Arkaan", "202410370110020");
+            Scanner scanner = new Scanner(System.in);
+            System.out.println();
+            System.out.println("==== Selamat Datang Di Halaman Login System ====");
+            System.out.println("Pilih login: ");
             System.out.println("1. Admin");
             System.out.println("2. Mahasiswa");
             System.out.println("3. Keluar");
-            System.out.print("Pilihan: ");
-            int pilihan = scanner.nextInt();
-            scanner.nextLine(); // Buang enter
+            System.out.print("Masukan pilihan: ");
+            int pilih = scanner.nextInt();
+            scanner.nextLine();
 
-            if (pilihan == 1) {
-                System.out.print("Username: ");
+            if (pilih == 1) {
+                System.out.print("Masukkan username: ");
                 String username = scanner.nextLine();
-                System.out.print("Password: ");
+                System.out.print("Masukkan password: ");
                 String password = scanner.nextLine();
-                user = new Admin(username, password);
-            } else if (pilihan == 2) {
-                System.out.print("Nama: ");
+
+                boolean loginBerhasil = false;
+                for (User user : userList) {
+                    if (user instanceof Admin) {
+                        if (user.login(username, password)) {
+                            user.info();
+                            user.displayAppMenu();
+                            loginBerhasil = true;
+                            break;
+                        }
+                    }
+                }
+                if (!loginBerhasil) {
+                    System.out.println("Login Admin gagal! Username atau password salah.");
+                }
+            } else if (pilih == 2) {
+                System.out.print("Masukkan nama: ");
                 String nama = scanner.nextLine();
-                System.out.print("NIM: ");
+                System.out.print("Masukkan NIM: ");
                 String nim = scanner.nextLine();
-                user = new Mahasiswa(nama, nim);
-            } else if (pilihan == 3) {
-                System.out.println("Keluar...");
-                continueLogin = false;
+
+                boolean loginBerhasil = false;
+
+                for (User user : userList) {
+                    if (user instanceof Mahasiswa) {
+                        if (user.login(nama, nim)) {
+                            user.info();
+                            user.displayAppMenu();
+                            loginBerhasil = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!loginBerhasil) {
+                    System.out.println("Login Mahasiswa gagal! Nama atau NIM salah.");
+                }
+            } else if (pilih == 3) {
+                System.out.println("Anda telah keluar dari program...");
                 break;
             } else {
                 System.out.println("Pilihan tidak valid.");
-                continue;
-            }
-
-            if (user.login()) {
-                System.out.println("Login berhasil!");
-                user.displayAppMenu();
-            } else {
-                System.out.println("Login gagal!");
             }
         }
-
-        scanner.close();
     }
 }

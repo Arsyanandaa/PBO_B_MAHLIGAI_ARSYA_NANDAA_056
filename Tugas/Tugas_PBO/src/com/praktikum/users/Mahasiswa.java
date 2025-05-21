@@ -1,75 +1,83 @@
 package com.praktikum.users;
-
 import com.praktikum.actions.MahasiswaActions;
+import com.praktikum.data.Item;
+import com.praktikum.main.LoginSystem;
 
 import java.util.Scanner;
 
-public class Mahasiswa extends User implements MahasiswaActions {
-    private String nim;
-
-    // Constructor cuma terima nama & nim
-    public Mahasiswa(String nama, String nim) {
-        super(nama, ""); // password dikosongin karena nggak dipakai
-        this.nim = nim;
+public class Mahasiswa  extends User implements MahasiswaActions {
+    Scanner scan = new Scanner(System.in);
+    public Mahasiswa(String nama, String nim){
+        super(nama, nim);
     }
 
-    // Override method login
     @Override
-    public boolean login() {
-        return nama.equals("Mahligai Arsya Nanda") && nim.equals("202410370110056");
+    public boolean login(String inputNama, String inputNim) {
+        return this.getNama().equals(inputNama) && this.getNim().equals(inputNim);
     }
 
-    // Override method menu aplikasi
+    @Override
+    public void info() {
+        System.out.println("Login berhasil sebagai Mahasiswa!");
+        super.info();
+    }
+
+    @Override
+    public void reportItem(){
+        scan.nextLine();
+        System.out.print("Nama Barang: ");
+        String namaBarang = scan.nextLine();
+        System.out.print("deskripsi Barang: ");
+        String deskripsiBarang = scan.nextLine();
+        System.out.print("Lokasi Terakhir/Ditemukan: ");
+        String lokasiBarang = scan.nextLine();
+        System.out.println("==== Cetak ====");
+        System.out.println("Nama Barang = " + namaBarang);
+        System.out.println("deskripsi Barang = " + deskripsiBarang);
+        System.out.println("Lokasi Terakhir/Ditemukan = " + lokasiBarang);
+
+        Item item = new Item(namaBarang, deskripsiBarang, lokasiBarang, "Reported");
+        LoginSystem.reportedItems.add(item);
+        System.out.println("Laporan berhasil ditambahkan.");
+
+    }
+
+    @Override
+    public void viewReportedItems(){
+        if(LoginSystem.reportedItems.isEmpty()){
+            System.out.println("Belum ada laporan barang.");
+        }else {
+            System.out.println("Daftar barang yang dilaporkan:");
+            for(Item item : LoginSystem.reportedItems){
+                if (item.getStatus().equals("Reported")) {
+                    System.out.println("- " + item.getItemName() + " | " + item.getDescription() + " | " + item.getLocation());
+                }
+            }
+        }
+
+    }
+
     @Override
     public void displayAppMenu() {
-        Scanner scanner = new Scanner(System.in);
-        int pilihan;
-
-        do {
-            System.out.println("\n===== Menu Mahasiswa =====");
+        while (true) {
+            System.out.println();
+            System.out.println("==== Selamat Datang Di Display App Menu Mahasiswa ====");
             System.out.println("1. Laporkan Barang Temuan/Hilang");
             System.out.println("2. Lihat Daftar Laporan");
             System.out.println("0. Logout");
-            System.out.print("Pilih menu: ");
-            pilihan = scanner.nextInt();
-            scanner.nextLine(); // bersihin newline
+            System.out.print("Masukan pilihan: ");
+            int pilihMenu = scan.nextInt();
 
-            switch (pilihan) {
-                case 1:
-                    reportItem();
-                    break;
-                case 2:
-                    viewReportedItems();
-                    break;
-                case 0:
-                    System.out.println("Logout berhasil.");
-                    break;
-                default:
-                    System.out.println("Pilihan tidak valid!");
+            if (pilihMenu == 1) {
+                reportItem();
+            } else if (pilihMenu == 2) {
+                viewReportedItems();
+            } else if (pilihMenu == 0) {
+                System.out.println("Anda logout ...");
+                break;
+            } else {
+                System.out.println("Inputan Invalid!");
             }
-
-        } while (pilihan != 0);
-    }
-
-
-    public void reportItem() {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Nama Barang: ");
-        String namabarang = scanner.nextLine();
-        System.out.print("Deskripsi Barang: ");
-        String deskripsibarang = scanner.nextLine();
-        System.out.print("Lokasi Terakhir/Ditemukan: ");
-        String lokasiterakhir = scanner.nextLine();
-
-        System.out.println("\nLaporan berhasil dikirim:");
-        System.out.println("- Nama Barang: " + namabarang);
-        System.out.println("- Deskripsi: " + deskripsibarang);
-        System.out.println("- Lokasi: " + lokasiterakhir);
-    }
-
-    // Placeholder fitur lihat laporan
-    public void viewReportedItems() {
-        System.out.println(">> Fitur lihat laporan belum tersedia <<");
+        }
     }
 }
